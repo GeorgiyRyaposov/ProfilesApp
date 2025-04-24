@@ -15,12 +15,10 @@ public class DateBirthProcessor : IFieldProcessor
         var parsed = DateTime.TryParseExact(input, "dd.mm.yyyy", 
             CultureInfo.InvariantCulture, DateTimeStyles.None, out _value);
 
-        if (!parsed)
-        {
-            errorMessage = "Неверный формат даты, попробуйте ещё раз";
-        }
-
-        errorMessage = string.Empty;
+        errorMessage = parsed 
+            ? string.Empty
+            : "Неверный формат даты, попробуйте ещё раз";
+        
         return parsed;
     }
 
