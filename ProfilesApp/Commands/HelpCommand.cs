@@ -9,10 +9,15 @@ public class HelpCommand : ICommand, IHasNameAndDescription
     public string Description => "Показать список доступных команд с описанием";
 
     private readonly ICommandsService _commandsService;
+    private readonly IUserInterfaceService _userInterfaceService;
+    private readonly ILocalizationService _localizationService;
 
-    public HelpCommand(ICommandsService commandsService)
+    public HelpCommand(ICommandsService commandsService,
+        IUserInterfaceService userInterfaceService, ILocalizationService localizationService)
     {
         _commandsService = commandsService;
+        _userInterfaceService = userInterfaceService;
+        _localizationService = localizationService;
     }
     
     public void Execute(params string[] args)
@@ -20,16 +25,18 @@ public class HelpCommand : ICommand, IHasNameAndDescription
         var commands = _commandsService.GetActiveCommands();
         
         var sb = new StringBuilder();
-        sb.AppendLine("Список доступных команд:");
+        var header = _localizationService.Get("Список доступных команд:");
+        sb.AppendLine(header);
         
         foreach (var cmd in commands)
         {
             if (cmd is IHasNameAndDescription namedCmd)
             {
-                sb.AppendLine($"'-{namedCmd.Name}' {namedCmd.Description}");
+                var description = _localizationService.Get(namedCmd.Description);
+                sb.AppendLine($"'-{namedCmd.Name}' {description}");
             }
         }
         
-        Console.Write(sb.ToString());
+        _userInterfaceService.ShowMessage(sb.ToString());
     }
 }

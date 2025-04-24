@@ -16,8 +16,6 @@ public interface IProfilesRepository
 
 public class ProfilesRepository : IProfilesRepository
 {
-    private readonly string _directory = Path.Combine(Directory.GetCurrentDirectory(), "Анкеты");
-
     #region Consts
 
     private const string Extension = "txt";
@@ -32,6 +30,15 @@ public class ProfilesRepository : IProfilesRepository
     private const string CreatedAtProperty = "Анкета заполнена";
 
     #endregion //Consts
+    
+    private readonly string _directory = Path.Combine(Directory.GetCurrentDirectory(), "Анкеты");
+
+    private readonly IUserInterfaceService _userInterfaceService;
+
+    public ProfilesRepository(IUserInterfaceService userInterfaceService)
+    {
+        _userInterfaceService = userInterfaceService;
+    }
 
     public void Save(ProfileModel profile)
     {
@@ -48,7 +55,7 @@ public class ProfilesRepository : IProfilesRepository
         var filePath = Path.Combine(_directory, $"{profile.FullName}.{Extension}");
         File.WriteAllText(filePath, content.ToString(), Encoding.Unicode);
 
-        Console.WriteLine($"Анкета сохранена в {filePath}");
+        _userInterfaceService.ShowMessage("Анкета сохранена в {0}", filePath);
     }
 
     public ProfileModel[] GetAll()

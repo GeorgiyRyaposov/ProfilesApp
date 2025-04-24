@@ -8,27 +8,30 @@ public class DeleteFileCommand : ICommand, IHasNameAndDescription
     public string Description => "<Имя файла анкеты> - Удалить указанную анкету";
     
     private readonly IProfilesRepository _profilesRepository;
+    private readonly IUserInterfaceService _userInterfaceService;
 
-    public DeleteFileCommand(IProfilesRepository profilesRepository)
+    public DeleteFileCommand(IProfilesRepository profilesRepository, 
+        IUserInterfaceService userInterfaceService)
     {
         _profilesRepository = profilesRepository;
+        _userInterfaceService = userInterfaceService;
     }
     
     public void Execute(params string[] args)
     {
         if (args.Length == 0)
         {
-            Console.WriteLine("Укажите ФИО для удаления");
+            _userInterfaceService.ShowMessage("Укажите ФИО для удаления");
             return;
         }
         
         if (_profilesRepository.DeleteProfile(args[0]))
         {
-            Console.WriteLine("Анкета успешно удалена");
+            _userInterfaceService.ShowMessage("Анкета успешно удалена");
         }
         else
         {
-            Console.WriteLine("Не удалось удалить анкету");
+            _userInterfaceService.ShowMessage("Не удалось удалить анкету");
         }
     }
 }

@@ -1,10 +1,19 @@
-﻿namespace ProfilesApp.StateMachine.States;
+﻿using ProfilesApp.Services;
+
+namespace ProfilesApp.StateMachine.States;
 
 public class ExitState : IState
 {
+    private readonly IUserInterfaceService _userInterfaceService;
+
+    public ExitState(IUserInterfaceService userInterfaceService)
+    {
+        _userInterfaceService = userInterfaceService;
+    }
+
     public void Enter()
     {
-        Console.WriteLine("Нажмите любую кнопку для выхода..");
-        Console.ReadKey();
+        _userInterfaceService.ShowMessage("Нажмите любую кнопку для выхода..");
+        _userInterfaceService.ReadKeyInput();
     }
 }

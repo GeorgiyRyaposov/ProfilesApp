@@ -1,28 +1,43 @@
-﻿using ProfilesApp.Models;
+﻿using System.Text;
+using ProfilesApp.Models;
 
 namespace ProfilesApp.Services;
 
 public interface IStatisticsService
 {
-    void Show(ProfileModel[] models);
+    string GetOverallStatistics(ProfileModel[] models);
 }
 
 public class StatisticsService : IStatisticsService
 {
-    public void Show(ProfileModel[] models)
+    private readonly ILocalizationService _localizationService;
+
+    public StatisticsService(ILocalizationService localizationService)
+    {
+        _localizationService = localizationService;
+    }
+
+    public string GetOverallStatistics(ProfileModel[] models)
     {
         if (models == null || !models.Any())
         {
-            Console.WriteLine("Нет данных о профилях");
-            return;
+            return string.Empty;
         }
         
         var age = CalculateAverageAge(models);
-        var ageForm = GetAgeForm(age);
+        var ageForm = _localizationService.Get(GetAgeForm(age));
+
+        var statistics = new StringBuilder();
         
-        Console.WriteLine($"Средний возраст всех опрошенных: {age} {ageForm}");
-        Console.WriteLine($"Самый популярный язык программирования: {GetPopularLanguage(models)}");
-        Console.WriteLine($"Самый опытный программист: {GetMostExperienced(models)}");
+        var ageStats = _localizationService.Get("Средний возраст всех опрошенных: {0} {1}", age, ageForm);
+        var languageStats = _localizationService.Get("Самый популярный язык программирования: {0}", GetPopularLanguage(models));
+        var experienceStats = _localizationService.Get("Самый опытный программист: {0}", GetMostExperienced(models));
+
+        statistics.AppendLine(ageStats);
+        statistics.AppendLine(languageStats);
+        statistics.AppendLine(experienceStats);
+        
+        return statistics.ToString();
     }
 
     private int CalculateAverageAge(ProfileModel[] models)
@@ -45,7 +60,7 @@ public class StatisticsService : IStatisticsService
 
         return totalAge / models.Length;
     }
-    private static string GetAgeForm(int age)
+    private string GetAgeForm(int age)
     {
         // Получаем последнюю цифру возраста
         var lastDigit = age % 10;

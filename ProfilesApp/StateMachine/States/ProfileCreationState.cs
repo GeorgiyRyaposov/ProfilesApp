@@ -9,14 +9,17 @@ public class ProfileCreationState : IState
     private readonly ICommandsService _commandsService;
     private readonly IServiceProvider _serviceProvider;
     private readonly IProfileBuilder _profileBuilder;
+    private readonly IUserInterfaceService _userInterfaceService;
 
     public ProfileCreationState(ICommandsService commandsService, 
         IServiceProvider serviceProvider,
-        IProfileBuilder profileBuilder)
+        IProfileBuilder profileBuilder, 
+        IUserInterfaceService userInterfaceService)
     {
         _commandsService = commandsService;
         _serviceProvider = serviceProvider;
         _profileBuilder = profileBuilder;
+        _userInterfaceService = userInterfaceService;
     }
     
     public void Enter()
@@ -24,7 +27,8 @@ public class ProfileCreationState : IState
         RegisterCommands();
         
         _profileBuilder.Reset();
-        _profileBuilder.ShowCurrentQuestion();
+        var question = _profileBuilder.GetCurrentQuestion();
+        _userInterfaceService.ShowMessage(question);
     }
 
     private void RegisterCommands()

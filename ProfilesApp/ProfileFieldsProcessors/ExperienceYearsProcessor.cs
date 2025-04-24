@@ -10,20 +10,21 @@ public class ExperienceYearsProcessor : IFieldProcessor
 
     private int _value;
 
-    public bool TryProcessInput(string input)
+    public bool TryProcessInput(string input, out string errorMessage)
     {
         if (!int.TryParse(input, NumberStyles.Integer, CultureInfo.InvariantCulture, out _value))
         {
-            Console.WriteLine("Неверное значение, попробуйте ещё раз");
+            errorMessage = "Неверное значение, попробуйте ещё раз";
             return false;
         }
 
         if (_value < 0)
         {
-            Console.WriteLine("Не может быть отрицательным, попробуйте ещё раз");
+            errorMessage = "Не может быть отрицательным, попробуйте ещё раз";
             return false;
         }
 
+        errorMessage = string.Empty;
         return true;
     }
 

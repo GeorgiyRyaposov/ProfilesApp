@@ -9,11 +9,14 @@ public class SaveProfileCommand : ICommand, IHasNameAndDescription
 
     private readonly IProfileBuilder _profileBuilder;
     private readonly IProfilesRepository _profilesRepository;
+    private readonly IUserInterfaceService _userInterfaceService;
 
-    public SaveProfileCommand(IProfileBuilder profileBuilder, IProfilesRepository profilesRepository)
+    public SaveProfileCommand(IProfileBuilder profileBuilder, 
+        IProfilesRepository profilesRepository, IUserInterfaceService userInterfaceService)
     {
         _profileBuilder = profileBuilder;
         _profilesRepository = profilesRepository;
+        _userInterfaceService = userInterfaceService;
     }
     
     public void Execute(params string[] args)
@@ -26,7 +29,7 @@ public class SaveProfileCommand : ICommand, IHasNameAndDescription
         }
         else
         {
-            Console.WriteLine("Не все поля заполнены, попробуйте ещё раз");
+            _userInterfaceService.ShowMessage("Не все поля заполнены, попробуйте ещё раз");
         }
     }
 }

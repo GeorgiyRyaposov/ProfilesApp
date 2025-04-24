@@ -8,18 +8,21 @@ public class InitialState : IState
 {
     private readonly ICommandsService _commandsService;
     private readonly IServiceProvider _serviceProvider;
+    private readonly IUserInterfaceService _userInterfaceService;
 
-    public InitialState(ICommandsService commandsService, IServiceProvider serviceProvider)
+    public InitialState(ICommandsService commandsService, IServiceProvider serviceProvider, 
+        IUserInterfaceService userInterfaceService)
     {
         _commandsService = commandsService;
         _serviceProvider = serviceProvider;
+        _userInterfaceService = userInterfaceService;
     }
     
     public void Enter()
     {
         RegisterCommands();
-        
-        Console.WriteLine("Выберите действие:");
+
+        _userInterfaceService.ShowMessage("Выберите действие:");
     }
 
     private void RegisterCommands()

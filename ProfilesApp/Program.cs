@@ -12,6 +12,7 @@ namespace ProfilesApp
         {
             var serviceProvider = BuildServiceProvider();
 
+            var userInterfaceService = serviceProvider.GetService<IUserInterfaceService>();
             var commandsService = serviceProvider.GetService<ICommandsService>();
             var stateMachine = serviceProvider.GetService<IAppStateMachine>();
             stateMachine.SetInitialState();
@@ -23,11 +24,11 @@ namespace ProfilesApp
                     break;
                 }
 
-                var input = Console.ReadLine();
+                var input = userInterfaceService.ReadLineInput();
                 var executed = commandsService.TryExecute(input);
                 if (!executed)
                 {
-                    Console.WriteLine("Введена неверная команда, попробуйте использовать -help");
+                    userInterfaceService.ShowMessage("Введена неверная команда, попробуйте использовать -help");
                 }
             }
         }
@@ -39,6 +40,8 @@ namespace ProfilesApp
             services.AddSingleton<IProfileBuilder, ProfileBuilder>();
             services.AddSingleton<IProfilesRepository, ProfilesRepository>();
             services.AddSingleton<IStatisticsService, StatisticsService>();
+            services.AddSingleton<IUserInterfaceService, UserInterfaceService>();
+            services.AddSingleton<ILocalizationService, LocalizationService>();
 
             services.AddSingleton<IAppStateMachine, AppStateMachine>();
             services.AddTransient<InitialState>();

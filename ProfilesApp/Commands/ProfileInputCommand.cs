@@ -12,11 +12,14 @@ public class ProfileInputCommand : ICommand
 {
     private readonly IProfileBuilder _profileBuilder;
     private readonly IAppStateMachine _appStateMachine;
+    private readonly IUserInterfaceService _userInterfaceService;
 
-    public ProfileInputCommand(IProfileBuilder profileBuilder, IAppStateMachine appStateMachine)
+    public ProfileInputCommand(IProfileBuilder profileBuilder, 
+        IAppStateMachine appStateMachine, IUserInterfaceService userInterfaceService)
     {
         _profileBuilder = profileBuilder;
         _appStateMachine = appStateMachine;
+        _userInterfaceService = userInterfaceService;
     }
     
     public void Execute(params string[] args)
@@ -26,9 +29,10 @@ public class ProfileInputCommand : ICommand
             return;
         }
         
-        var success = _profileBuilder.TryProcessAnswer(args[0]);
+        var success = _profileBuilder.TryProcessAnswer(args[0], out var errorMessage);
         if (!success)
         {
+            _userInterfaceService.ShowMessage(errorMessage);
             return;
         }
         
@@ -38,7 +42,8 @@ public class ProfileInputCommand : ICommand
         }
         else
         {
-            _profileBuilder.ShowCurrentQuestion();
+            var question = _profileBuilder.GetCurrentQuestion();
+            _userInterfaceService.ShowMessage(question);
         }
     }
 }

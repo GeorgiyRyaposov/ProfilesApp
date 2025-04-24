@@ -9,17 +9,18 @@ public class NameProcessor : IFieldProcessor
         
     private string _value;
 
-    public bool TryProcessInput(string input)
+    public bool TryProcessInput(string input, out string errorMessage)
     {
         var parts = input.Split();
 
         if (parts.Length == 3)
         {
             _value = input;
+            errorMessage = string.Empty;
             return true;
         }
             
-        Console.WriteLine("ФИО введены не полностью");
+        errorMessage = "ФИО введены не полностью";
         return false;
     }
 

@@ -10,7 +10,7 @@ public class PhoneProcessor : IFieldProcessor
 
     private string _value;
 
-    public bool TryProcessInput(string input)
+    public bool TryProcessInput(string input, out string errorMessage)
     {
         // Удаляем все символы, кроме цифр и плюса (если он в начале)
         var normalized = Regex.Replace(input, @"[^\d+]", "");
@@ -21,10 +21,9 @@ public class PhoneProcessor : IFieldProcessor
         // {10} — ровно 10 цифр после +7 или 8
         var matched = Regex.IsMatch(normalized, @"^(\+7|8)[0-9]{10}$");
 
-        if (!matched)
-        {
-            Console.WriteLine("Неверный формат номера телефона, попробуйте ещё раз");
-        }
+        errorMessage = matched 
+            ? string.Empty
+            : "Неверный формат номера телефона, попробуйте ещё раз";
 
         return matched;
     }

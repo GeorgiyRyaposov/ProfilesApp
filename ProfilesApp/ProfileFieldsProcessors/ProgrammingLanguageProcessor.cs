@@ -1,4 +1,5 @@
 ﻿using ProfilesApp.Models;
+using ProfilesApp.Services;
 
 namespace ProfilesApp.ProfileFieldsProcessors;
 
@@ -18,21 +19,29 @@ public class ProgrammingLanguageProcessor : IFieldProcessor
         "Python",
         "Ruby",
     };
+    
+    
+    private readonly ILocalizationService _localizationService;
 
     private string _availableOptions = string.Join(", ", AllowedOptions);
     private string _value;
 
-    public bool TryProcessInput(string input)
+    public ProgrammingLanguageProcessor(ILocalizationService localizationService)
+    {
+        _localizationService = localizationService;
+    }
+
+    public bool TryProcessInput(string input, out string errorMessage)
     {
         _value = AllowedOptions.FirstOrDefault(x =>
             string.Equals(x, input, StringComparison.OrdinalIgnoreCase));
         var success = !string.IsNullOrEmpty(_value);
 
-        if (!success)
-        {
-            Console.WriteLine($"Неверное значение, попробуйте ещё раз (доступные значения: {_availableOptions})");
-        }
-
+        errorMessage = success
+            ? string.Empty
+            : _localizationService.Get("Неверное значение, попробуйте ещё раз (доступные значения: {0})",
+                _availableOptions);
+        
         return success;
     }
 

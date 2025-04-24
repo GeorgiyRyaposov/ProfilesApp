@@ -11,17 +11,19 @@ public class ZipProfileCommand : ICommand, IHasNameAndDescription
         "<Имя файла анкеты> <Путь для сохранения архива> - Запаковать указанную анкету в архив и сохранить архив по указанному пути";
 
     private readonly IProfilesRepository _profilesRepository;
+    private readonly IUserInterfaceService _userInterfaceService;
 
-    public ZipProfileCommand(IProfilesRepository profilesRepository)
+    public ZipProfileCommand(IProfilesRepository profilesRepository, IUserInterfaceService userInterfaceService)
     {
         _profilesRepository = profilesRepository;
+        _userInterfaceService = userInterfaceService;
     }
 
     public async void Execute(params string[] args)
     {
         if (args.Length < 2)
         {
-            Console.WriteLine("Введите <Имя файла анкеты> <Путь для сохранения архива>");
+            _userInterfaceService.ShowMessage("Введите <Имя файла анкеты> <Путь для сохранения архива>");
             return;
         }
 
@@ -29,7 +31,7 @@ public class ZipProfileCommand : ICommand, IHasNameAndDescription
         var fullPath = _profilesRepository.FindProfilePath(fileName);
         if (string.IsNullOrEmpty(fullPath))
         {
-            Console.WriteLine("Анкета не найдена");
+            _userInterfaceService.ShowMessage("Анкета не найдена");
             return;
         }
 
@@ -38,7 +40,7 @@ public class ZipProfileCommand : ICommand, IHasNameAndDescription
         var attributes = File.GetAttributes(zipPath);
         if (!attributes.HasFlag(FileAttributes.Directory))
         {
-            Console.WriteLine("Путь не является директорией");
+            _userInterfaceService.ShowMessage("Путь не является директорией");
             return;
         }
 
@@ -56,7 +58,7 @@ public class ZipProfileCommand : ICommand, IHasNameAndDescription
 
         await sourceStream.CopyToAsync(compressionStream);
 
-        Console.WriteLine($"Сжатие файла {sourceFile} завершено.");
-        Console.WriteLine($"Исходный размер: {sourceStream.Length}  сжатый размер: {targetStream.Length}");
+        _userInterfaceService.ShowMessage($"Сжатие файла {sourceFile} завершено.");
+        _userInterfaceService.ShowMessage($"Исходный размер: {sourceStream.Length}  сжатый размер: {targetStream.Length}");
     }
 }
