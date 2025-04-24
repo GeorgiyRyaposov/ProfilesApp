@@ -15,6 +15,10 @@ public interface IProfileBuilder
     void Reset();
 }
 
+/// <summary>
+/// Следит за порядком заполнения анкеты.
+/// В результате опроса создает профиль <see cref="ProfileModel"/>
+/// </summary>
 public class ProfileBuilder : IProfileBuilder
 {
     public bool IsProfileCompleted { get; private set; }

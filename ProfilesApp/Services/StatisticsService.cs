@@ -8,6 +8,9 @@ public interface IStatisticsService
     string GetOverallStatistics(ProfileModel[] models);
 }
 
+/// <summary>
+/// Создает статистику по профилям
+/// </summary>
 public class StatisticsService : IStatisticsService
 {
     private readonly ILocalizationService _localizationService;

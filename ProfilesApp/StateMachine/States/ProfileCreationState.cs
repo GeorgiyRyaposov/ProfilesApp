@@ -4,6 +4,10 @@ using ProfilesApp.Services;
 
 namespace ProfilesApp.StateMachine.States;
 
+/// <summary>
+/// Состояние создания профиля.
+/// Ограничивает количество команд необходимыми для этого состояния
+/// </summary>
 public class ProfileCreationState : IState
 {
     private readonly ICommandsService _commandsService;

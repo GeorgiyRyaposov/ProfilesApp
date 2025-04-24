@@ -9,11 +9,15 @@ public interface IProfilesRepository
     void Save(ProfileModel profile);
     ProfileModel[] GetAll();
     string FindProfilePath(string fileName);
+    bool HasProfile(string fileName);
     bool DeleteProfile(string fileName);
     string[] GetAllFiles();
     string[] GetAllFiles(DateTime atDate);
 }
 
+/// <summary>
+/// Содержит логику по работе с файлами анкет: сохранение, загрузка, поиск, удаление
+/// </summary>
 public class ProfilesRepository : IProfilesRepository
 {
     #region Consts
@@ -89,6 +93,11 @@ public class ProfilesRepository : IProfilesRepository
         }
 
         return string.Empty;
+    }
+
+    public bool HasProfile(string fileName)
+    {
+        return !string.IsNullOrEmpty(FindProfilePath(fileName));
     }
 
     public bool DeleteProfile(string fileName)

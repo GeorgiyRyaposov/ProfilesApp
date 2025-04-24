@@ -4,6 +4,10 @@ using ProfilesApp.Services;
 
 namespace ProfilesApp.StateMachine.States;
 
+/// <summary>
+/// Стартовое состояние приложения.
+/// Регистрирует список доступных команд
+/// </summary>
 public class InitialState : IState
 {
     private readonly ICommandsService _commandsService;

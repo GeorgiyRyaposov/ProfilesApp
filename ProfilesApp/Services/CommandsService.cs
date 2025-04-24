@@ -13,6 +13,10 @@ public interface ICommandsService
     ICommand[] GetActiveCommands();
 }
 
+/// <summary>
+/// Содержит список активных команд, выполняет команду по имени
+/// Если команда не найдена - выполняет fallback команду
+/// </summary>
 public class CommandsService : ICommandsService
 {
     private readonly HashSet<ICommand> _commands = new();

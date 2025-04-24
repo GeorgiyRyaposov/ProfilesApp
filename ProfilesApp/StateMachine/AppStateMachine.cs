@@ -12,6 +12,10 @@ public interface IAppStateMachine
     void SetExitState();
 }
 
+/// <summary>
+/// Машина состояний приложения.
+/// Позволяет переходить между состояниями и добавлять новые
+/// </summary>
 public class AppStateMachine : IAppStateMachine
 {
     public bool CompletedWork { get; private set; }

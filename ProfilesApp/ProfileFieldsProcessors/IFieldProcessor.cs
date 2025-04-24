@@ -2,6 +2,10 @@
 
 namespace ProfilesApp.ProfileFieldsProcessors;
 
+/// <summary>
+/// Вспомогательный инструмент для обработки полей профиля.
+/// Содержит описание требований к полю, а также методы для обработки ввода
+/// </summary>
 public interface IFieldProcessor
 {
     int Order { get; }

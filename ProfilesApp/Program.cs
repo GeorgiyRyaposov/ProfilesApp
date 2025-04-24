@@ -6,6 +6,11 @@ using ProfilesApp.StateMachine.States;
 
 namespace ProfilesApp
 {
+    /// <summary>
+    /// Машина состояний <see cref="IAppStateMachine"/> управляет списком доступных команд.
+    /// Основная часть логики работы с профилями распределена по сервисам.
+    /// Команды в своей работе используют эти сервисы.
+    /// </summary>
     internal class Program
     {
         static void Main()

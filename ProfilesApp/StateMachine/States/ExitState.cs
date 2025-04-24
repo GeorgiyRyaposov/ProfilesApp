@@ -13,7 +13,7 @@ public class ExitState : IState
 
     public void Enter()
     {
-        _userInterfaceService.ShowMessage("Нажмите любую кнопку для выхода..");
+        _userInterfaceService.ShowMessage("Нажмите любую кнопку для выхода.");
         _userInterfaceService.ReadKeyInput();
     }
 }

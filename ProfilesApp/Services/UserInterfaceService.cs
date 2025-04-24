@@ -7,6 +7,9 @@ public interface IUserInterfaceService
     char ReadKeyInput();
 }
 
+/// <summary>
+/// Инкапсулирует логику работы с пользователем
+/// </summary>
 public class UserInterfaceService : IUserInterfaceService
 {
     private readonly ILocalizationService _localizationService;
